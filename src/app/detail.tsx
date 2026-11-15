@@ -2,16 +2,14 @@ import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function QuoteDetailScreen() {
-  const params = useLocalSearchParams<{
-    id?: string;
-    quote?: string;
-    author?: string;
-  }>();
+  const params = useLocalSearchParams();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.quote}>“{params.quote ?? 'Söz seçilmedi'}”</Text>
-      <Text style={styles.author}>— {params.author ?? 'Bilinmiyor'}</Text>
+      <View style={styles.card}>
+        <Text style={styles.quote}>"{params.quote}"</Text>
+        <Text style={styles.author}>- {params.author}</Text>
+      </View>
     </View>
   );
 }
@@ -19,21 +17,27 @@ export default function QuoteDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
-    padding: 24,
+    backgroundColor: '#f5f5f5',
+    padding: 16,
     justifyContent: 'center',
   },
+  card: {
+    backgroundColor: '#ffffff',
+    padding: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
   quote: {
-    fontSize: 20,
+    fontSize: 18,
     fontStyle: 'italic',
-    color: '#0f172a',
-    lineHeight: 30,
+    color: '#222',
     marginBottom: 12,
   },
   author: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#475569',
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: 'gray',
     textAlign: 'right',
   },
 });
