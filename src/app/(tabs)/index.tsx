@@ -5,12 +5,14 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 export default function QuoteListScreen() {
   const [quotes, setQuotes] = useState<any[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,6 +28,14 @@ export default function QuoteListScreen() {
       });
   }, []);
 
+  const filteredQuotes = quotes.filter((item) => {
+    const query = search.toLowerCase();
+    return (
+      item.quote.toLowerCase().includes(query) ||
+      item.author.toLowerCase().includes(query)
+    );
+  });
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -37,29 +47,44 @@ export default function QuoteListScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={quotes}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() =>
-              router.push({
-                pathname: '/detail',
-                params: {
-                  id: item.id,
-                  quote: item.quote,
-                  author: item.author,
-                },
-              })
-            }>
-            <Text style={styles.quoteText} numberOfLines={2}>
-              "{item.quote}"
-            </Text>
-            <Text style={styles.authorText}>- {item.author}</Text>
-          </TouchableOpacity>
-        )}
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Söz veya yazar ara..."
+        value={search}
+        onChangeText={setSearch}
       />
+
+      <Text style={styles.countText}>{filteredQuotes.length} kayıt</Text>
+
+      {filteredQuotes.length === 0 ? (
+        <View style={styles.emptyBox}>
+          <Text style={styles.emptyText}>Sonuç bulunamadı</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredQuotes}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                router.push({
+                  pathname: '/detail',
+                  params: {
+                    id: item.id,
+                    quote: item.quote,
+                    author: item.author,
+                  },
+                })
+              }>
+              <Text style={styles.quoteText} numberOfLines={2}>
+                "{item.quote}"
+              </Text>
+              <Text style={styles.authorText}>- {item.author}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 }
@@ -79,6 +104,31 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 8,
     color: '#555',
+  },
+  searchInput: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    fontSize: 15,
+    marginBottom: 8,
+  },
+  countText: {
+    fontSize: 13,
+    color: '#555',
+    marginBottom: 8,
+    fontWeight: '600',
+  },
+  emptyBox: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: 'gray',
   },
   card: {
     backgroundColor: '#ffffff',
