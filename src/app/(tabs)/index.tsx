@@ -12,6 +12,7 @@ import {
 
 export default function QuoteListScreen() {
   const [quotes, setQuotes] = useState<any[]>([]);
+  const [dailyQuote, setDailyQuote] = useState<any>(null);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -20,6 +21,10 @@ export default function QuoteListScreen() {
       .then((res) => res.json())
       .then((data) => {
         setQuotes(data.quotes);
+        if (data.quotes && data.quotes.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.quotes.length);
+          setDailyQuote(data.quotes[randomIndex]);
+        }
         setLoading(false);
       })
       .catch((error) => {
@@ -47,6 +52,25 @@ export default function QuoteListScreen() {
 
   return (
     <View style={styles.container}>
+      {dailyQuote && (
+        <TouchableOpacity
+          style={styles.dailyCard}
+          onPress={() =>
+            router.push({
+              pathname: '/detail',
+              params: {
+                id: dailyQuote.id,
+                quote: dailyQuote.quote,
+                author: dailyQuote.author,
+              },
+            })
+          }>
+          <Text style={styles.dailyLabel}>Günün Sözü</Text>
+          <Text style={styles.dailyQuoteText}>"{dailyQuote.quote}"</Text>
+          <Text style={styles.dailyAuthorText}>- {dailyQuote.author}</Text>
+        </TouchableOpacity>
+      )}
+
       <TextInput
         style={styles.searchInput}
         placeholder="Söz veya yazar ara..."
@@ -104,6 +128,31 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 8,
     color: '#555',
+  },
+  dailyCard: {
+    backgroundColor: '#1e293b',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  dailyLabel: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#93c5fd',
+    marginBottom: 4,
+    textTransform: 'uppercase',
+  },
+  dailyQuoteText: {
+    fontSize: 15,
+    color: '#ffffff',
+    fontStyle: 'italic',
+    marginBottom: 6,
+  },
+  dailyAuthorText: {
+    fontSize: 13,
+    color: '#cbd5e1',
+    textAlign: 'right',
+    fontWeight: 'bold',
   },
   searchInput: {
     backgroundColor: '#ffffff',
