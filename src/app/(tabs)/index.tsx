@@ -14,6 +14,7 @@ export default function QuoteListScreen() {
   const [quotes, setQuotes] = useState<any[]>([]);
   const [dailyQuote, setDailyQuote] = useState<any>(null);
   const [search, setSearch] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,10 +36,13 @@ export default function QuoteListScreen() {
 
   const filteredQuotes = quotes.filter((item) => {
     const query = search.toLowerCase();
-    return (
+    const matchesSearch =
       item.quote.toLowerCase().includes(query) ||
-      item.author.toLowerCase().includes(query)
-    );
+      item.author.toLowerCase().includes(query);
+    const matchesAuthor =
+      selectedAuthor === '' || item.author === selectedAuthor;
+
+    return matchesSearch && matchesAuthor;
   });
 
   if (loading) {
@@ -78,7 +82,18 @@ export default function QuoteListScreen() {
         onChangeText={setSearch}
       />
 
-      <Text style={styles.countText}>{filteredQuotes.length} kayıt</Text>
+      <View style={styles.infoRow}>
+        <Text style={styles.countText}>{filteredQuotes.length} kayıt</Text>
+        {selectedAuthor !== '' && (
+          <TouchableOpacity
+            style={styles.clearFilterButton}
+            onPress={() => setSelectedAuthor('')}>
+            <Text style={styles.clearFilterText}>
+              Yazar: {selectedAuthor} ✕
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
 
       {filteredQuotes.length === 0 ? (
         <View style={styles.emptyBox}>
@@ -104,7 +119,10 @@ export default function QuoteListScreen() {
               <Text style={styles.quoteText} numberOfLines={2}>
                 "{item.quote}"
               </Text>
-              <Text style={styles.authorText}>- {item.author}</Text>
+              <TouchableOpacity
+                onPress={() => setSelectedAuthor(item.author)}>
+                <Text style={styles.authorText}>- {item.author}</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
           )}
         />
@@ -164,10 +182,26 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 8,
   },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   countText: {
     fontSize: 13,
     color: '#555',
-    marginBottom: 8,
+    fontWeight: '600',
+  },
+  clearFilterButton: {
+    backgroundColor: '#e2e8f0',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  clearFilterText: {
+    fontSize: 12,
+    color: '#1e293b',
     fontWeight: '600',
   },
   emptyBox: {
