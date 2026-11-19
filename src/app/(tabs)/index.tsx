@@ -45,6 +45,21 @@ export default function QuoteListScreen() {
     return matchesSearch && matchesAuthor;
   });
 
+  const openDetail = (item: any) => {
+    const otherQuotes = quotes.filter(
+      (q) => q.author === item.author && q.id !== item.id
+    );
+    router.push({
+      pathname: '/detail',
+      params: {
+        id: item.id,
+        quote: item.quote,
+        author: item.author,
+        otherQuotes: JSON.stringify(otherQuotes),
+      },
+    });
+  };
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -59,16 +74,7 @@ export default function QuoteListScreen() {
       {dailyQuote && (
         <TouchableOpacity
           style={styles.dailyCard}
-          onPress={() =>
-            router.push({
-              pathname: '/detail',
-              params: {
-                id: dailyQuote.id,
-                quote: dailyQuote.quote,
-                author: dailyQuote.author,
-              },
-            })
-          }>
+          onPress={() => openDetail(dailyQuote)}>
           <Text style={styles.dailyLabel}>Günün Sözü</Text>
           <Text style={styles.dailyQuoteText}>"{dailyQuote.quote}"</Text>
           <Text style={styles.dailyAuthorText}>- {dailyQuote.author}</Text>
@@ -106,16 +112,7 @@ export default function QuoteListScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.card}
-              onPress={() =>
-                router.push({
-                  pathname: '/detail',
-                  params: {
-                    id: item.id,
-                    quote: item.quote,
-                    author: item.author,
-                  },
-                })
-              }>
+              onPress={() => openDetail(item)}>
               <Text style={styles.quoteText} numberOfLines={2}>
                 "{item.quote}"
               </Text>
