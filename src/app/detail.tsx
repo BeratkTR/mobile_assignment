@@ -1,8 +1,37 @@
 import { useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+import { isQuoteSaved, toggleSaveQuote } from '@/storage/savedQuotes';
 
 export default function QuoteDetailScreen() {
   const params = useLocalSearchParams();
+  const [saved, setSaved] = useState(false);
+
+  const quoteId = String(params.id || '');
+  const quoteText = String(params.quote || '');
+  const authorName = String(params.author || '');
+
+  useEffect(() => {
+    if (quoteId) {
+      isQuoteSaved(quoteId).then(setSaved);
+    }
+  }, [quoteId]);
+
+  const handleToggleSave = async () => {
+    const newState = await toggleSaveQuote({
+      id: quoteId,
+      quote: quoteText,
+      author: authorName,
+    });
+    setSaved(newState);
+  };
 
   let otherQuotes: any[] = [];
   if (typeof params.otherQuotes === 'string') {
@@ -16,8 +45,16 @@ export default function QuoteDetailScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.quote}>"{params.quote}"</Text>
-        <Text style={styles.author}>- {params.author}</Text>
+        <Text style={styles.quote}>"{quoteText}"</Text>
+        <Text style={styles.author}>- {authorName}</Text>
+
+        <TouchableOpacity
+          style={[styles.saveButton, saved && styles.savedButton]}
+          onPress={handleToggleSave}>
+          <Text style={styles.saveButtonText}>
+            {saved ? 'Kaydedilenlerden Çıkar' : 'Kaydet'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.sectionTitle}>Yazarın Listedeki Diğer Sözleri</Text>
@@ -65,6 +102,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'gray',
     textAlign: 'right',
+    marginBottom: 16,
+  },
+  saveButton: {
+    backgroundColor: '#1e293b',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  savedButton: {
+    backgroundColor: '#dc2626',
+  },
+  saveButtonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 16,
