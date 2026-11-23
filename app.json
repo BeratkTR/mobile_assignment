@@ -1,21 +1,20 @@
 {
   "expo": {
-    "name": "mobil",
-    "slug": "mobil",
+    "name": "Söz Defteri",
+    "slug": "soz-defteri",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "mobil",
+    "icon": "./assets/images/app-icon.png",
+    "scheme": "sozdefteri",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/app-icon.png"
     },
     "android": {
+      "package": "com.g221210025.sozdefteri",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#1e293b",
+        "foregroundImage": "./assets/images/app-icon.png"
       },
       "predictiveBackGestureEnabled": false
     },
