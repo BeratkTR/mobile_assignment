@@ -33,14 +33,13 @@ npx expo start
 ---
 
 ## Ekran Görüntüleri
-> Uygulama çalıştırıldıktan sonra 3 ekranın (Liste, Detay, Kaydedilenler) ekran görüntüleri eklenecektir.
 
 | Liste Ekranı | Detay Ekranı | Kaydedilenler Ekranı |
 | :---: | :---: | :---: |
-| ![Liste](screenshots/liste.png) | ![Detay](screenshots/detay.png) | ![Kaydedilenler](screenshots/kaydedilenler.png) |
+| <img src="assets/app_photos/1.jpeg" width="200" /> | <img src="assets/app_photos/2.jpeg" width="200" /> | <img src="assets/app_photos/3.jpeg" width="200" /> |
 
 ---
 
 ## Bağlantılar
-* **APK İndirme Bağlantısı (EAS Build):** `[APK Linki Eklenecek]`
-* **Ekran Kaydı (Maks. 1 dk):** `[Ekran Kaydı Linki Eklenecek]`
+* **APK İndirme Bağlantısı (EAS Build):** [Expo EAS Build (APK)](https://expo.dev/accounts/alchemistic/projects/soz-defteri/builds/1f5160be-160b-4b00-adbc-33a51bf8b38c)
+* **Ekran Kaydı:** [Google Drive Ekran Kaydı](https://drive.google.com/file/d/15q7PDWaNm2BBUScjoM3v7ZqJDDwXfcmr/view?usp=sharing)
